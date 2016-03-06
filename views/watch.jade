@@ -214,13 +214,19 @@ block content
       data.update(item);
       }
       });
-
-        setInterval(function(){if (Math.abs(timeline.getCurrentTime() - (currDate+(total*1000))) > 3000){
+        var moved = false;
+        setInterval(function(){
+        if (Math.abs(timeline.getCurrentTime() - (currDate+(total*1000))) > 3000){
         (timeline.moveTo(currDate+(total*1000)))
+        moved = true;
+        }
+        else if (moved == false){
+        (timeline.moveTo((new Date()).getTime()))
         }
         else{
-        (timeline.moveTo((new Date()).getTime()))
-        }},200);
+        (timeline.moveTo(currDate+(total*1000)))
+        }
+        },200);
         setInterval(function(){
         if (Math.abs(timeline.getCurrentTime() - (currDate+(total*1000))) > 3000){
         timeline.setCurrentTime(currDate+(total*1000));}},200);

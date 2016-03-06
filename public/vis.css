@@ -474,6 +474,9 @@ input.vis-configuration.vis-config-range:focus::-ms-fill-upper {
   /*background-color: #49306B;*/
   display: inline-block;
   /*overflow: hidden;*/
+  background: #517fa4; /* fallback for old browsers */
+background: -webkit-linear-gradient(to left, #517fa4 , #243949); /* Chrome 10-25, Safari 5.1-6 */
+background: linear-gradient(to left, #517fa4 , #243949); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
 }
 
 .vis-item.vis-selected {
@@ -512,7 +515,7 @@ input.vis-configuration.vis-config-range:focus::-ms-fill-upper {
 
 .vis-item.vis-range {
   border-style: solid;
-  border-radius: 2px;
+  border-radius: 0px;
   box-sizing: border-box;
 }
 
@@ -547,7 +550,7 @@ input.vis-configuration.vis-config-range:focus::-ms-fill-upper {
   padding: 0;
   position: absolute;
   width: 0;
-  border-left-width: 1px;
+  border-left-width: 0px;
   border-left-color: #CBC5EA;
   border-left-style: solid;
 }
