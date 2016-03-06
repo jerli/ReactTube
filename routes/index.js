@@ -7,7 +7,7 @@ router.get('/', function(req, res, next) {
 });
 
 router.get('/', function(req, res, next) {
-	res.render('index', {title: 'Video'})
+	res.render('watch', {title: 'Video'})
 })
 //<<<<<<< HEAD
 /* GET Hello World page. 

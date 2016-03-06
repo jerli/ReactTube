@@ -1,21 +1,55 @@
 extends layout
 
 block content
-  h1= title
-  p Welcome to #{title}
-  #player-1
+  h1.video-title
+  #player
+  p.curTime 
+
     script.
-      var player1,
-      firstStateChange;
-      player1 = YouTubePlayer('player-1', {
-      videoId: '#{link}'
-      });
-      player1
-      // Play video is a Promise.
-      // 'playVideo' is queued and will execute as soon as player is ready.
-      .playVideo()
-      .then(function () {
-      console.log('Starting to play player1. It will take some time to buffer video before it starts playing.');
-      });
 
+      var tag = document.createElement('script');
+      tag.src = "https://www.youtube.com/iframe_api";
+      var firstScriptTag = document.getElementsByTagName('script')[0];
+      firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+      var player;
+      function onYouTubeIframeAPIReady() {
+      player = new YT.Player('player', {
+      height: '700',
+      width: '1149',
+      videoId: '#{link}',
+      events: {
+      'onReady': onPlayerReady,
+      'onStateChange': onPlayerStateChange
+      }
+      });
+      }
+      function onPlayerReady(event) {
+      event.target.playVideo();
+      }
+      var done = false;
+      function onPlayerStateChange(event) {
+      if (event.data == YT.PlayerState.PLAYING && !done) {
+      //setTimeout(stopVideo, 6000);
+      done = true;
+      }
+      }
+      function stopVideo() {
+      player.stopVideo();
+      }
+      var x;
 
+      function onPlayerReady(){
+      (function loop() {
+      setTimeout(function () {
+      x = parseInt(player.getCurrentTime().toString());
+      x = x + 1;
+      console.log(x);
+      $('.curTime').text(x.toString());
+      loop()
+      }, 1000);
+      }());
+
+      var z;
+      z = player.getVideoData();
+      $('.video-title').text(z.title);
+      }
