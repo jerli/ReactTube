@@ -1,12 +1,17 @@
 extends layout
 
 block content
+  h1.title ReactTube
   h1.video-title
   #player
   p.curTime 
 
     script.
 
+      var w = window.innerWidth - 30;
+      if (w > 1149) {
+        w = 1149
+      }
       var tag = document.createElement('script');
       tag.src = "https://www.youtube.com/iframe_api";
       var firstScriptTag = document.getElementsByTagName('script')[0];
@@ -14,9 +19,10 @@ block content
       var player;
       function onYouTubeIframeAPIReady() {
       player = new YT.Player('player', {
-      height: '700',
-      width: '1149',
+      height: (w*(7/11.5)).toString(),
+      width: w.toString(),
       videoId: '#{link}',
+      theme: 'light',
       events: {
       'onReady': onPlayerReady,
       'onStateChange': onPlayerStateChange
@@ -37,18 +43,34 @@ block content
       player.stopVideo();
       }
       var x;
-
+      var sec, min;
+      //Runs when YouTube Player is ready
       function onPlayerReady(){
+      //Updates time every second
       (function loop() {
       setTimeout(function () {
       x = parseInt(player.getCurrentTime().toString());
       x = x + 1;
+      if (x > 60){
+      sec = x % 60;
+      min = parseInt((x-sec)/60);
+      }
+      else {
+      sec = x;
+      min = 0;
+      }
+      if (sec < 10){
+      x = min.toString() + ":0" + sec.toString();
+      }
+      else{
+      x = min.toString() + ":" + sec.toString();
+      }
       console.log(x);
-      $('.curTime').text(x.toString());
+      $('.curTime').text("Current Time: "+ x);
       loop()
       }, 1000);
       }());
-
+      //Gets Video Title
       var z;
       z = player.getVideoData();
       $('.video-title').text(z.title);
