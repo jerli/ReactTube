@@ -3,142 +3,143 @@ extends layout
 
 
 block content
-
   script(src = '/vis.js')
   link(href = '/vis.css', rel = 'stylesheet', type = 'text/css')
   script(src = '/googleAnalytics.js')
 
   style(type = 'text/css').
-    body {
+    
+    /* body {
       font:11pt verdana;
 
-    }
+    } */
     .vis.timeline .item.past {
     filter: alpha(opacity = 50);
     opacity: 0.5;
     }
+  #wrapper  
+    h1.title ReactTube
+    h1.video-title
+    #player
+    p.curTime 
 
-  h1.title ReactTube
-  p.video-title
-  #player
-  p.curTime 
-
-    script.
-      var x;
-      var w = window.innerWidth - 200;
-      if (w > 1000) {
-        w = 1000
-      }
-      var tag = document.createElement('script');
-      tag.src = "https://www.youtube.com/iframe_api";
-      var firstScriptTag = document.getElementsByTagName('script')[0];
-      firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
-      var player;
-      function onYouTubeIframeAPIReady() {
-      player = new YT.Player('player', {
-      height: (w*(7/11.5)*.6).toString(),
-      width: (w*.6).toString(),
-      videoId: '#{link}',
-      theme: 'light',
-      autoplay:1,
-      events: {
-      'onReady': onPlayerReady,
-      'onStateChange': onPlayerStateChange
-      }
-      });
-      }
-      var done = false;
-      function onPlayerStateChange(event) {
-      if (event.data == YT.PlayerState.PLAYING && !done) {
-       //setTimeout(stopVideo, 6000);
-      done = true;
-      }
-      }
-      function stopVideo() {
-      player.stopVideo();
-      }
-
-      // API event: when the player is ready, call the function in the queue
-
-      // Helper function to check if the player is ready
-      function isPlayerReady(player) {
-        return player && typeof player.playVideo === 'function';
-      }
-
-      // Instead of calling player.playVideo() directly,
-      // using this function to play the video.
-      // If the player is not ready, queue player.playVideo() and invoke it when the player is ready
-      function playVideo(player) {
-        isPlayerReady(player) ? player.playVideo() : queue.push(function () {
-          player.playVideo();
+      script.
+        var x;
+        var w = window.innerWidth - 200;
+        if (w > 1000) {
+          w = 1000
+        }
+        var tag = document.createElement('script');
+        tag.src = "https://www.youtube.com/iframe_api";
+        var firstScriptTag = document.getElementsByTagName('script')[0];
+        firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+        var player;
+        function onYouTubeIframeAPIReady() {
+        player = new YT.Player('player', {
+        height: (w*(7/11.5)).toString(),
+        width: (w).toString(),
+        videoId: '#{link}',
+        theme: 'light',
+        autoplay:1,
+        events: {
+        'onReady': onPlayerReady,
+        'onStateChange': onPlayerStateChange
+        }
         });
-      }
+        }
+        var done = false;
+        function onPlayerStateChange(event) {
+        if (event.data == YT.PlayerState.PLAYING && !done) {
+         //setTimeout(stopVideo, 6000);
+        done = true;
+        }
+        }
+        function stopVideo() {
+        player.stopVideo();
+        }
 
-      x;
-      var sec, min;
-      //Runs when YouTube Player is ready
-      function onPlayerReady(){
-      //Updates time every second
+        // API event: when the player is ready, call the function in the queue
+
+        // Helper function to check if the player is ready
+        function isPlayerReady(player) {
+          return player && typeof player.playVideo === 'function';
+        }
+
+        // Instead of calling player.playVideo() directly,
+        // using this function to play the video.
+        // If the player is not ready, queue player.playVideo() and invoke it when the player is ready
+        function playVideo(player) {
+          isPlayerReady(player) ? player.playVideo() : queue.push(function () {
+            player.playVideo();
+          });
+        }
+
+        var x, total;
+        var sec, min;
+        //Runs when YouTube Player is ready
+        function onPlayerReady(){
+        //Updates time every second
 
         setTimeout(create,1500);
 
-      (function loop() {
-      setTimeout(function () {
-      player.playVideo();
-      x = parseInt(player.getCurrentTime().toString());
-      x = x + 1;
-      if (x > 60){
-      sec = x % 60;
-      min = parseInt((x-sec)/60);
-      }
-      else {
-      sec = x;
-      min = 0;
-      }
-      if (sec < 10){
-      x = min.toString() + ":0" + sec.toString();
-      }
-      else{
-      x = min.toString() + ":" + sec.toString();
-      }
-      console.log(x);
-      $('.curTime').text("Current Time: "+ x);
-      loop()
-      }, 1000);
-      }());
-      //Gets Video Title
-      var z;
-      z = player.getVideoData();
-      $('.video-title').text(z.title);
-      }
-      $(document).on('opened.fndtn.reveal', '[data-reveal]', function () {
-        playVideo();
-      });
-    script(src='https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js')
-    script.
-      var json;
-      httpGetAsync("/comments?v=#{link}", function(data){
-        json = JSON.parse(data);
-        console.log(json);
-      });
-
-      function httpGetAsync(theUrl, callback) {
-        var xmlHttp = new XMLHttpRequest();
-        xmlHttp.onreadystatechange = function () {
-          if (xmlHttp.readyState == 4 && xmlHttp.status == 200)
-            console.log("readu");
-            callback(xmlHttp.responseText);
+        (function loop() {
+        setTimeout(function () {
+        player.playVideo();
+        x = parseInt(player.getCurrentTime().toString());
+        x = x + 1;
+        total = x;
+        if (x > 60){
+        sec = x % 60;
+        min = parseInt((x-sec)/60);
         }
-        xmlHttp.open("GET", theUrl, true); // true for asynchronous
-        xmlHttp.send(null);
-      }
+        else {
+        sec = x;
+        min = 0;
+        }
+        if (sec < 10){
+        x = min.toString() + ":0" + sec.toString();
+        }
+        else{
+        x = min.toString() + ":" + sec.toString();
+        }
+        //console.log(x);
+        $('.curTime').text("Current Time: "+ x);
+        loop()
+        }, 1000);
+        }());
+        //Gets Video Title
+        var z;
+        z = player.getVideoData();
+        $('.video-title').text(z.title);
+        }
+        $(document).on('opened.fndtn.reveal', '[data-reveal]', function () {
+          playVideo();
+        });
+      script(src='https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js')
+      script.
+        var json;
+        httpGetAsync("/comments?v=#{link}", function(data){
+          json = JSON.parse(data);
+          console.log(json);
+        });
+
+        function httpGetAsync(theUrl, callback) {
+          var xmlHttp = new XMLHttpRequest();
+          xmlHttp.onreadystatechange = function () {
+            if (xmlHttp.readyState == 4 && xmlHttp.status == 200)
+              console.log("readu");
+              callback(xmlHttp.responseText);
+          }
+          xmlHttp.open("GET", theUrl, true); // true for asynchronous
+          xmlHttp.send(null);
+        }
 
 
-    body
     #customTime
     p
     #mytimeline
     script.
+      var currDate;
       var create = function () {
 
         var num = 1;
@@ -176,13 +177,15 @@ block content
       var options = {
         showCurrentTime: true,
         timeAxis: {scale: 'second', step:30},
+        format: {majorLabels: {second:''}},
         type: "box",
         zoomable: false,
         editable:false,
-        maxHeight:300
+        height:'200px'
       };
+      
 
-      var currDate = (new Date()).getTime();
+      currDate = (new Date()).getTime();
 
       // create a timeline
       var container = document.getElementById('mytimeline');
@@ -211,7 +214,10 @@ block content
       }
       });
 
-        setInterval(function(){timeline.moveTo((new Date()).getTime())},200);
+        setInterval(function(){timeline.moveTo(currDate+(total*1000))},200);
+        setInterval(function(){
+        if (Math.abs(timeline.getCurrentTime() - (currDate+(total*1000))) > 3000){
+        timeline.setCurrentTime(currDate+(total*1000));}},200);
 
       // set a custom range from -2 minute to +3 minutes current time
       var start = new Date((new Date()).getTime()-60000);

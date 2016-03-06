@@ -311,8 +311,9 @@ input.vis-configuration.vis-config-range:focus::-ms-fill-upper {
 
 .vis-timeline {
   position: relative;
-  border: 1px solid #bfbfbf;
-
+  border: 2px solid #CBC5EA;
+  border-left-width:0px;
+  border-right-width:0px;
   overflow: hidden;
   padding: 0;
   margin: 0;
@@ -335,7 +336,7 @@ input.vis-configuration.vis-config-range:focus::-ms-fill-upper {
 .vis-panel.vis-right,
 .vis-panel.vis-top,
 .vis-panel.vis-bottom {
-  border: 1px #bfbfbf;
+  border: 3px #CBC5EA;
 }
 
 .vis-panel.vis-center,
@@ -466,10 +467,11 @@ input.vis-configuration.vis-config-range:focus::-ms-fill-upper {
 
 .vis-item {
   position: absolute;
-  color: #1A1A1A;
-  border-color: #97B0F8;
+  color: #FFFFFF;
+  border-color: #CBC5EA;
   border-width: 1px;
-  background-color: #D5DDF6;
+  padding:3px;
+  /*background-color: #49306B;*/
   display: inline-block;
   /*overflow: hidden;*/
 }
@@ -546,6 +548,7 @@ input.vis-configuration.vis-config-range:focus::-ms-fill-upper {
   position: absolute;
   width: 0;
   border-left-width: 1px;
+  border-left-color: #CBC5EA;
   border-left-style: solid;
 }
 
@@ -615,7 +618,7 @@ input.vis-configuration.vis-config-range:focus::-ms-fill-upper {
 
 .vis-time-axis .vis-text {
   position: absolute;
-  color: #4d4d4d;
+  color: #EFEFEF;
   padding: 3px;
   overflow: hidden;
   box-sizing: border-box;
@@ -638,11 +641,13 @@ input.vis-configuration.vis-config-range:focus::-ms-fill-upper {
 }
 
 .vis-time-axis .vis-grid.vis-minor {
-  border-color: #e5e5e5;
+  border-color: #CBC5EA;
+;
 }
 
 .vis-time-axis .vis-grid.vis-major {
-  border-color: #bfbfbf;
+  border-color: #CBC5EA;
+;
 }
 
 .vis-current-time {
@@ -698,18 +703,18 @@ input.vis-configuration.vis-config-range:focus::-ms-fill-upper {
 }
 
 .vis-panel.vis-background.vis-horizontal .vis-grid.vis-minor {
-  border-color: #e5e5e5;
+  border-color: #CBC5EA;
 }
 
 .vis-panel.vis-background.vis-horizontal .vis-grid.vis-major {
-  border-color: #bfbfbf;
+  border-color: #CBC5EA;
 }
 
 
 .vis-data-axis .vis-y-axis.vis-major {
   width: 100%;
   position: absolute;
-  color: #4d4d4d;
+  color: #FFF;
   white-space: nowrap;
 }
 
@@ -725,7 +730,7 @@ input.vis-configuration.vis-config-range:focus::-ms-fill-upper {
 .vis-data-axis .vis-y-axis.vis-minor {
   position: absolute;
   width: 100%;
-  color: #bebebe;
+  color: #FFF;
   white-space: nowrap;
 }
 
@@ -739,7 +744,7 @@ input.vis-configuration.vis-config-range:focus::-ms-fill-upper {
 
 .vis-data-axis .vis-y-axis.vis-title {
   position: absolute;
-  color: #4d4d4d;
+  color: #EFEFEF.;
   white-space: nowrap;
   bottom: 20px;
   text-align: center;
