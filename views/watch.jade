@@ -26,8 +26,8 @@ block content
       script.
         var x;
         var w = window.innerWidth - 200;
-        if (w > 1000) {
-          w = 1000
+        if (w > 900) {
+          w = 900
         }
         var tag = document.createElement('script');
         tag.src = "https://www.youtube.com/iframe_api";
@@ -103,7 +103,7 @@ block content
         x = min.toString() + ":" + sec.toString();
         }
         //console.log(x);
-        $('.curTime').text("Current Time: "+ x);
+        $('.curTime').text("Current Time: "+ x +" | To add your own comment, simply leave a comment on Youtube containing a timestamp.");
         loop()
         }, 1000);
         }());
@@ -181,9 +181,10 @@ block content
         type: "box",
         zoomable: false,
         editable:false,
-        height:'200px'
+        height:'220px',
+        margin:{item:'3px' }
       };
-      
+
 
       currDate = (new Date()).getTime();
 
@@ -214,7 +215,12 @@ block content
       }
       });
 
-        setInterval(function(){timeline.moveTo(currDate+(total*1000))},200);
+        setInterval(function(){if (Math.abs(timeline.getCurrentTime() - (currDate+(total*1000))) > 3000){
+        (timeline.moveTo(currDate+(total*1000)))
+        }
+        else{
+        (timeline.moveTo((new Date()).getTime()))
+        }},200);
         setInterval(function(){
         if (Math.abs(timeline.getCurrentTime() - (currDate+(total*1000))) > 3000){
         timeline.setCurrentTime(currDate+(total*1000));}},200);

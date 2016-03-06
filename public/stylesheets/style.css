@@ -37,6 +37,7 @@ h1 {
 #mytimeline {
 	/*background: #efefef;*/
 	position: absolute;
+	text-align: center;
 	bottom:0;
 	width: 100%;
 }
