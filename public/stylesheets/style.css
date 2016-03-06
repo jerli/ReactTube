@@ -18,6 +18,7 @@ a {
 
 .title {
 	font: 40px 'MontSerrat', Helvetica, sans-serif;
+    margin-top:5px;
 }
 
 #player {
@@ -26,4 +27,8 @@ a {
 
 h1 {
 	font-weight: 400;
+}
+
+.video-title{
+    margin-top:-20px;
 }

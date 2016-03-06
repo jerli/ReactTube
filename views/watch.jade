@@ -1,13 +1,30 @@
 extends layout
 
+
+
 block content
+
+  script(src = '/vis.js')
+  link(href = '/vis.css', rel = 'stylesheet', type = 'text/css')
+  script(src = '/googleAnalytics.js')
+
+  style(type = 'text/css').
+    body {
+      font:11pt verdana;
+
+    }
+    .vis.timeline .item.past {
+    filter: alpha(opacity = 50);
+    opacity: 0.5;
+    }
+
   h1.title ReactTube
-  h1.video-title
+  p.video-title
   #player
   p.curTime 
 
     script.
-
+      var x;
       var w = window.innerWidth - 200;
       if (w > 1000) {
         w = 1000
@@ -19,36 +36,55 @@ block content
       var player;
       function onYouTubeIframeAPIReady() {
       player = new YT.Player('player', {
-      height: (w*(7/11.5)).toString(),
-      width: w.toString(),
+      height: (w*(7/11.5)*.6).toString(),
+      width: (w*.6).toString(),
       videoId: '#{link}',
       theme: 'light',
+      autoplay:1,
       events: {
       'onReady': onPlayerReady,
       'onStateChange': onPlayerStateChange
       }
       });
       }
-      function onPlayerReady(event) {
-      event.target.playVideo();
-      }
       var done = false;
       function onPlayerStateChange(event) {
       if (event.data == YT.PlayerState.PLAYING && !done) {
-      //setTimeout(stopVideo, 6000);
+       //setTimeout(stopVideo, 6000);
       done = true;
       }
       }
       function stopVideo() {
       player.stopVideo();
       }
-      var x;
+
+      // API event: when the player is ready, call the function in the queue
+
+      // Helper function to check if the player is ready
+      function isPlayerReady(player) {
+        return player && typeof player.playVideo === 'function';
+      }
+
+      // Instead of calling player.playVideo() directly,
+      // using this function to play the video.
+      // If the player is not ready, queue player.playVideo() and invoke it when the player is ready
+      function playVideo(player) {
+        isPlayerReady(player) ? player.playVideo() : queue.push(function () {
+          player.playVideo();
+        });
+      }
+
+      x;
       var sec, min;
       //Runs when YouTube Player is ready
       function onPlayerReady(){
       //Updates time every second
+
+        setTimeout(create,1500);
+
       (function loop() {
       setTimeout(function () {
+      player.playVideo();
       x = parseInt(player.getCurrentTime().toString());
       x = x + 1;
       if (x > 60){
@@ -74,4 +110,113 @@ block content
       var z;
       z = player.getVideoData();
       $('.video-title').text(z.title);
+      }
+      $(document).on('opened.fndtn.reveal', '[data-reveal]', function () {
+        playVideo();
+      });
+    script(src='https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js')
+    script.
+      var json;
+      httpGetAsync("/comments?v=#{link}", function(data){
+        json = JSON.parse(data);
+        console.log(json);
+      });
+
+      function httpGetAsync(theUrl, callback) {
+        var xmlHttp = new XMLHttpRequest();
+        xmlHttp.onreadystatechange = function () {
+          if (xmlHttp.readyState == 4 && xmlHttp.status == 200)
+            console.log("readu");
+            callback(xmlHttp.responseText);
+        }
+        xmlHttp.open("GET", theUrl, true); // true for asynchronous
+        xmlHttp.send(null);
+      }
+
+
+    body
+    #customTime
+    p
+    #mytimeline
+    script.
+      var create = function () {
+
+        var num = 1;
+        var uniTime = (new Date()).getTime();
+
+      arrReacts = [];
+      console.log(json.reacts);
+
+      for (var key in json.reacts) {
+
+        if (json.reacts.hasOwnProperty(key)) {
+
+          for(x = 0; x < json.reacts[key].length; x++) {
+            var obj = {};
+            obj.id = num;
+            var a = key.split(':'); // split it at the colons
+
+            // Assume no videos longer than one hour for now
+            var seconds = (+a[0]) * 60000 + (+a[1])*1000;
+            obj.start = uniTime + seconds;
+            obj.end = uniTime + seconds + 1;
+            obj.content = json.reacts[key][x];
+            //obj.content = "test";
+            console.log(obj);
+            arrReacts.push(obj);
+            num++;
+          }
+          }
+      }
+
+        var data = new vis.DataSet(arrReacts);
+
+        console.log(data);
+      // specify options
+      var options = {
+        showCurrentTime: true,
+        timeAxis: {scale: 'second', step:30},
+        type: "box",
+        zoomable: false,
+        editable:false,
+        maxHeight:300
+      };
+
+      var currDate = (new Date()).getTime();
+
+      // create a timeline
+      var container = document.getElementById('mytimeline');
+      timeline = new vis.Timeline(container, data, options);
+      timeline.addCustomTime(new Date());
+      // add event listener
+      timeline.on('timechange', function (event) {
+      document.getElementById("customTime").innerHTML = "Custom Time: " + event.time;
+      var item = data.get(1);
+      if (event.time > item.start) {
+      item.end = new Date(event.time);
+      var now = new Date();
+      if (event.time < now) {
+        item.content = "Dynamic event (past)";
+        item.className = 'past';
+      }
+      else if (event.time > now) {
+        item.content = "Dynamic event (future)";
+        item.className = 'future';
+      }
+      else {
+        item.content = "Dynamic event (now)";
+        item.className = 'now';
+      }
+      data.update(item);
+      }
+      });
+
+        setInterval(function(){timeline.moveTo((new Date()).getTime())},200);
+
+      // set a custom range from -2 minute to +3 minutes current time
+      var start = new Date((new Date()).getTime()-60000);
+      var end   = new Date((new Date()).getTime()+60000);
+
+      timeline.setWindow(start, end, {animation: false});
+
       }
