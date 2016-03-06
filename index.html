@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+
+<html>
+	
+	<!-- Scaling -->
+	<meta name = "viewport" content= "width = device-width, initial-scale = 1.0">
+	<link rel="shortcut icon" href="images/Logo.png" />
+	
+	<head>
+		<title> re.actube </title>
+		<link rel = "stylesheet" type = "text/css" href = "stylesheet.css"/>
+	</head>
+
+	<body>
+		<div id = main_background></div>
+		<div id = "header">
+			<!-- <h1> REACTUBE </h1>
+			<h2> Share your reaction by commenting on the Youtube video in real time! </h2> -->
+		</div>
+		
+		<!-- Video: Youtube API -->
+		<div id ="player"></div>
+		<div id = "video">
+			<script>
+				var tag = document.createElement('script');
+				tag.src = "https://www.youtube.com/iframe_api";
+				var firstScriptTag = document.getElementsByTagName('script')[0];
+				firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+				var player;
+				function onYouTubeIframeAPIReady() {
+					player = new YT.Player('player', {
+						height: '700',
+						width: '1149',
+						videoId: '89_U6spi8lI',
+						events: {
+							'onReady': onPlayerReady,
+							'onStateChange': onPlayerStateChange
+						}
+					});
+				}
+		  
+				function onPlayerReady(event) {
+					event.target.playVideo();
+				}
+
+				var done = false;
+				function onPlayerStateChange(event) {
+					if (event.data == YT.PlayerState.PLAYING && !done) {
+					//setTimeout(stopVideo, 6000);
+					done = true;
+					}
+				}
+				
+				function stopVideo() {
+					player.stopVideo();
+				}
+			</script>
+		</div>
+	</body>
+</html>
