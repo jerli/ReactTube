@@ -1,6 +1,6 @@
 # ReactTube
 
-Created for BrickHack II by @WxnChen11, @jerli, and @henry-cho
+Created for BrickHack II by [@WxnChen11](https://github.com/WxnChen11) , @jerli , and [@henry-cho](https://github.com/henry-cho)
 
 ReactTube is a web application that allows users to view comments on Youtube videos in real time.
 
